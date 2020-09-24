@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--绑定操作数据表的mapper层对应接口-->
+<mapper namespace="com.sinon.mapper.AuthorMapper">
+    <!--    id指定方法，resultType:表示返回值类型-->
+    <select id="queryAllAuthor" resultType="author">
+        select * from author
+    </select>
+    <select id="queryAuthorById" resultType="author">
+        select * from author where id = #{id}
+    </select>
+    <insert id="addAuthor" parameterType="author">
+        insert into author values (#{id},#{author_name},#{nation})
+    </insert>
+    <update id="updateAuthor" parameterType="author">
+        update author set author_name = #{author_name}, nation=#{nation}
+        where id = #{id}
+    </update>
+    <delete id="deleteAuthor" parameterType="int">
+        delete from author where id = #{id}
+    </delete>
+</mapper>

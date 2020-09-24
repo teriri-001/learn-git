@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    username: root
+    password: 557807yy
+    url: jdbc:mysql://localhost:3306/books?serverTimeZone=GTC&useUnicode=true&characterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+# 整合mybatis
+#mybatis:
+#  让mybatis自动扫描到pojo中定义的实体类，避免在mapper.xml配置文件中使用全类名指定
+#  type-aliases-package: com.sinon.pojo
+#  mapper的地址
+mybatis:
+  type-aliases-package: com.sinon.pojo
+  mapper-locations: classpath:mybatis/mapper/*.xml
+#  mapper-locations: classpath:mybatis/mapper/*.xml
