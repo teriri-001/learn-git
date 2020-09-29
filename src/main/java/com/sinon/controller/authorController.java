@@ -19,13 +19,13 @@ public class authorController {
         return authorList;
     }
     @ApiOperation("根据id查询")
-    @GetMapping("/queryid/{id}")
+    @GetMapping("/queryById/{id}")
     public author queryAuthorById(@PathVariable("id")int id){
         author author = authorMapper.queryAuthorById(id);
         return author;
     }
     @ApiOperation("添加")
-    @GetMapping("/add")
+    @PostMapping("/add")
     public String addAuthor(author author){
         authorMapper.addAuthor(author);
         return "finish add";
@@ -37,7 +37,7 @@ public class authorController {
         return "update finished";
     }
     @ApiOperation("删除")
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteAuthor(@PathVariable("id")int id){
         authorMapper.deleteAuthor(id);
         return "delete finished";
