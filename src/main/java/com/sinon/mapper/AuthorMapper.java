@@ -14,12 +14,16 @@ import java.util.List;
 public interface AuthorMapper {
 //    查询所有的author
     List<author> queryAllAuthor();
+
 //    通过id查询author
     author queryAuthorById(int id);
+
 //    增加一个author
     int addAuthor(author author);
-//    修改
+
+//    修改author信息
     int updateAuthor(author author);
+
 //    删除
     int deleteAuthor(int id);
 }
