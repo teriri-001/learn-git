@@ -23,11 +23,11 @@
 
 3. MongoDB体系结构
 
-   | mysql  |      MongoDB       |
-   | :----: | :----------------: |
-   | 数据库 |       数据库       |
-   |   表   | 集合（collection） |
-   |   行   |  文档（document）  |
+   |  mysql   |      MongoDB       |
+   | :------: | :----------------: |
+   |  数据库  |       数据库       |
+   |    表    | 集合（collection） |
+   | 一行数据 |  文档（document）  |
 
 ## 单机部署
 

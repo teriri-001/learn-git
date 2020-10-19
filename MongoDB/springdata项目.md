@@ -117,8 +117,4 @@
               Criteria.where("qty").size(2)  
       );
       // 对应sql逻辑 qty>28 and qty
-```
-      
-   
-   
-   
+      ```
