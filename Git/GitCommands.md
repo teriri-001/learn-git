@@ -88,25 +88,27 @@
   # 回滚
   	- git reset --hard commit提交编码
   	
-# 回滚到已经回滚过的版本时需要使用`git reflog`命令查询版本号
-  	- git reflog
+  ```
+
+   - git reflog
+       	- 回滚到已经回滚过的版本时需要使用`git reflog`命令查询版本号
+  	- **忽略文件( .gitignoer )**
   ```
   
   
 
 ---
 
-**忽略文件( .gitignoer )**
 
 ​	可以将不用提交的文件，在该文件中标注出来
 
-```bash
+​```bash
 # 文件中使用 '#' 做注释
 *.txt 		 # 忽略所有以'.txt'结尾的文件
 !lib.txt	 # 'lib.txt'文件除外
 /temp		 # 忽略根目录下的文件，temp除外
 build/		 # 忽略build目录下的所有文件
-```
+  ```
 
 
 
@@ -150,7 +152,7 @@ build/		 # 忽略build目录下的所有文件
 
 **git管理**
 
-* 快捷操作：拉取代码、提交代码到本地仓库![](C:\Users\yangyim\Pictures\snipaste\Snipaste_2020-09-29_14-15-02.jpg)
+* 快捷操作：拉取代码、提交代码到本地仓库（代码更新指：远程仓库版本新增的内容添加![](C:\Users\yangyim\Pictures\snipaste\Snipaste_2020-09-29_14-15-02.jpg)
 
 * 代码提交：提交新建、或修改的文件到本地仓库
 

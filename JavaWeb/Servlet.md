@@ -128,6 +128,26 @@ public class MyServlet extends HttpServlet{
 
 * 包名右键  —> creat new servlet —> 添加处理逻辑 —->配置访问地址
 
+* **在IDEA中使用Servlet**
+
+  ```Java
+  // 使用注解 @Webservlet
+  // 继承HttpServlet
+  @Webservlet
+  public myServlet extends HttpServlet{
+      protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+          // 在页面中打印输出
+          resp.getWriter().println("hello!");
+      }
+  }
+  
+  ---------------------------------------------------
+      
+  // 在启动类添加注解 @ServletComnentScan(xxxx) 进行组件扫描
+  ```
+
+  
+
 ---
 
 ##### 8、servletConfig类
@@ -183,6 +203,23 @@ servlet程序的配置信息类
       Object key = context.getAttribute("key");
   }
   ```
+
+---
+
+##### 11、Web中  “/”  斜线的不同意义
+
+* “/” 斜杠如果被浏览器解析，得到的地址是：`http://ip:8080`
+
+* “/” 斜杠如果别服务器解析，得到的地址是：`http://ip:port:工程路径`
+
+  ```java
+  // example
+  servletContext.getRealPath("/")
+  ```
+
+---
+
+##### 12、JavaEE三层架构
 
 
 
@@ -255,3 +292,236 @@ servlet程序的配置信息类
 ---
 
 ##### 5、MIME类型说明
+
+`mime`是HTTP中的数据类型，格式是`大类型/小类型`如：`text/html`，`image/jpeg`等
+
+
+
+---
+
+### Http常用封装类
+
+##### 1、HttpServletRequest类
+
+* 每次只要有请求进入Tomcat服务器，Tomcat服务器就会把请求过来的Http协议解析，结果放入Request对象中。然后传递到service方法（doGET 和 doPost）中。
+
+* 通过改类对象，可以获取所有请求信息
+
+---
+
+##### 2、doPost请求中文乱码问题
+
+* 当使用post请求传值为中文时，会出现乱码问题，spring boot不会出现该问题
+
+---
+
+##### 3、请求转发
+
+**说明**
+
+* 指服务器接收到请求之后，从一个服务器资源跳转到另一个资源的操作
+
+**特点**
+
+* 转发属于一次请求，地址栏没有变化，且共享Request域中的数据
+* 可以转发到`WEB-INF`中的资源，一般该目录无法直接访问
+* 不可以转发访问该工程外的资源
+
+**示例**
+
+* 表单提交
+
+---
+
+##### 4、请求重定向
+
+**含义**
+
+* 服务器原地址搬迁之后，浏览器访问原地址时，由原地址响应程序返回信息提示，浏览器接收信息解析后重新访问新地址得到响应。
+
+**原地址响应信息**
+
+* 响应行状态码：302
+* 响应头`location`：新地址
+
+**特点**
+
+* 浏览器地址栏会发生变化
+* 重定向是两次请求
+* 不共享Request域中的数据
+* 不能访问 `WEB-INF`中的资源，可以访问工程外的资源（如百度）
+
+**示例一**
+
+```Java
+// 原地址servlet响应
+@Override
+protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("原地址servlet响应，跳转新地址：");
+    
+    	// 方式一，不推荐
+        // 设置响应信息,表示重定向，并设置地址
+        resp.setStatus(302);
+        resp.setHeader("Location","http://localhost:8080/newHello");
+    
+    	// 方式二
+    	resp.sendRedirect("http://localhost:8080/newHello")
+    }
+
+// 新地址
+@Override
+protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("跳转到新地址：");
+        resp.getWriter().println("hello");
+}
+```
+
+
+
+---
+
+##### 5、HttpServletResponse类
+
+**说明**
+
+* 封装了每次请求后，服务器所响应的信息
+* 可以该类设置返回信息
+
+**两个输出流**
+
+* 字节流 `getOutputStream()`	：常用于下载（传递二进制数据）
+* 字符流 `getWirter()` 	：常用于回传字符串
+
+**往客户端回传数据**
+
+```Java
+protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    	// 修改编码方式，防止中文乱码问题
+    
+    	// 设置服务器字符集为 "utf-8"
+        resp.setCharacterEncoding("UTF-8");
+        // 通过响应头设置浏览器字符集也为 "utf-8"
+    	resp.setHeader("Content-Type","text/html;charset=UTF-8");
+    	// 也可以直接使用 resp.setContentType("text/html;charset=UTF-8")
+    
+    	// 发送数据
+        resp.getWriter().write("hello");
+        resp.getWriter().println("帅滴");
+    }
+```
+
+
+
+
+
+---
+
+### Cookie和Session
+
+##### 1、Cookie
+
+**概念**
+
+* `cookie`是 `servlet`发送到 web浏览器的少量信息，这些信息由浏览器保存
+* 客户端有了`cookie`之后，每次访问服务器是发送该信息给服务器
+* cookie的值可以唯一的标识客户端
+
+**Cookie使用**
+
+```java 
+// 创建Cookie，不支持中文
+Cookie myCookie = new Cookie("key","value");
+// 通知客户端保存cookie
+Resp.addCookie(myCookie);
+    
+    
+// 获取Cookie,存放在请求头
+Cookie[] cookies = req.getCookies();
+
+// 修改Cookie的值
+// 通过创建并添加同名的Cookie修改
+resp.addCookie(new Cookie("key","newValue"));
+
+```
+
+**Cookie的生命控制**
+
+* 设置Cookie的生存时间`setMaxAge()`
+
+  ```java
+  Cookie myCookie = new Cookie("key","value");
+  /*
+  * 正数：在指定的秒数后过期
+  * 负数：关闭浏览器后删除，默认值
+  * 零：  马上删除
+  **/
+  myCookie.setMaxAge(-1);
+  ```
+
+**Cookie的有效路径path**
+
+* 可以有效的过滤哪些`cookie`可以发送给服务器
+
+* 举例
+
+  ```
+  cookieA 	path=/工程路径
+  cookieB		path=/工程路径/ABC
+  
+  现请求地址如下：
+  	http://ip:port/工程路径/a.html
+  
+  则Cookie发送：cookieA 
+  
+  ```
+
+---
+
+**免用户名登录**
+
+将用户名作为`cookie`保存到浏览器中，下次访问时，服务器获取该值并自动填写
+
+
+
+---
+
+##### 2、Session会话
+
+**概念**
+
+* `session`是一个接口(`httpSession`)，每一个客户端都有自己的一个session会话，经常用来保存用户登录后的信息
+* **在浏览器关闭后失效，request和response在请求结束后失效**
+
+
+
+**使用session**
+
+```Java
+// 获取并创建Session
+HttpSession session = request.getSession();
+
+// 判断session是否为新建
+boolean result = session.isNew();
+```
+
+
+
+**RequestId**
+
+* 每一个会话都有一个身份证号，即会话ID，这个ID值是唯一的。
+
+  ```
+  // 获取会话的唯一标识
+  String id = request.getSession().getId();
+  ```
+
+  
+
+
+
+
+
+
+
+
+
